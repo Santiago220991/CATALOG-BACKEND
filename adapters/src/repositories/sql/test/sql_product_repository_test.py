@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 def test_list_all(product_repository, session, fake_database_product_list):
 
     [productA, productB] = fake_database_product_list
@@ -23,3 +25,15 @@ def test_filter(product_repository, session, fake_database_product_list):
             assert product.status == "New"
     else:
         assert products == []
+
+def test_update(product_repository, session, fake_database_product_list):
+    [productA, productB] = fake_database_product_list
+    updated_product=deepcopy(productA)
+    session.add(productA)
+    session.add(productB)
+    session.commit()
+   
+    updated_product.description = "Updated Description"
+    product = product_repository.update(updated_product.product_id, updated_product)
+
+    assert product.description == "Updated Description"

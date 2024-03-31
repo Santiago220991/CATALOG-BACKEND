@@ -32,3 +32,11 @@ class CreateProductResponseDto(ProductBase):
 
 class FilterProductResponseDto(BaseModel):
     products: List[ProductBase]
+
+
+class UpdateProductRequestDto(ProductBase):
+    ...
+
+
+class UpdateProductResponseDto(ProductBase):
+    ...

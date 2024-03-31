@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from app.src import Product, ProductRepository, ProductRepositoryException
 from .tables import ProductSchema
 
-
 class SQLProductRepository(ProductRepository):
     def __init__(self, session: Session) -> None:
         self.session = session
@@ -76,9 +75,29 @@ class SQLProductRepository(ProductRepository):
             self.session.rollback()
             raise ProductRepositoryException(method="find")
 
-    def edit(self, product: Product) -> Product:
-        # Needs Implementation
-        pass
+    def update(self, product_id: str, product: Product) -> Product:
+        try:
+            with self.session as session:
+                old_product = session.query(ProductSchema).filter(ProductSchema.product_id == product_id).first()
+                if old_product is None:
+                    return None
+
+                session.query(ProductSchema).filter(ProductSchema.product_id == product_id).update({
+                        ProductSchema.user_id: product.user_id,
+                        ProductSchema.name: product.name,
+                        ProductSchema.description: product.description,
+                        ProductSchema.price: product.price,
+                        ProductSchema.location: product.location,
+                        ProductSchema.status: product.status,
+                        ProductSchema.is_available: product.is_available
+                    })
+                session.commit()
+
+            return product
+        except Exception:
+            self.session.rollback()
+            raise ProductRepositoryException(method="update")
+        
 
     def delete(self, product_id: str) -> Product:
         # Needs Implementation

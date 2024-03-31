@@ -12,4 +12,7 @@ from .product import (
     CreateProductRequest,
     FilterProduct,
     FilterProductResponse,
+    UpdateProduct,
+    UpdateProductRequest,
+    UpdateProductResponse
 )

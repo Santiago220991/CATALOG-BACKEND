@@ -1,7 +1,5 @@
 import pytest
-from fastapi.testclient import TestClient
 from adapters.src.repositories.sql.tables.product import ProductSchema
-from api.src import create_app
 from faker import Faker
 from decimal import Decimal
 from app.src.core.models._product import Product, ProductStatuses
@@ -28,14 +26,6 @@ def fake_product_list():
     ) for _ in range(2)]
 
 
-# @pytest.fixture
-# def api_client() -> TestClient:
-#     api = create_app()
-#     client = TestClient(api)
-
-#     return client
-
-
 @pytest.fixture
 def fake_database_product_list():
     return [ProductSchema(
@@ -48,3 +38,18 @@ def fake_database_product_list():
         status=fake.random_element(elements=("New", "Used", "For parts")),
         is_available=fake.boolean()
     ) for _ in range(2)]
+
+
+@pytest.fixture
+def fake_product():
+    return Product(
+        product_id=fake.uuid4(),
+        user_id=fake.uuid4(),
+        name=fake.word(),
+        description=fake.sentence(),
+        price=Decimal(fake.pyint(min_value=0, max_value=9999, step=1)),
+        location=fake.address(),
+        status=fake.random_element(elements=(
+            ProductStatuses.NEW, ProductStatuses.USED, ProductStatuses.FOR_PARTS)),
+        is_available=fake.boolean()
+    )

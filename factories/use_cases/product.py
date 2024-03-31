@@ -5,6 +5,7 @@ from app.src.use_cases import (
     FindProductById,
     CreateProduct,
     FilterProduct,
+    UpdateProduct
 )
 
 
@@ -26,3 +27,7 @@ def create_product_use_case() -> CreateProduct:
 
 def filter_product_use_case() -> FilterProduct:
     return FilterProduct(get_product_repository())
+
+
+def update_product_use_case() -> UpdateProduct:
+    return UpdateProduct(get_product_repository())
