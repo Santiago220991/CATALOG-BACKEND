@@ -14,5 +14,8 @@ from .product import (
     FilterProductResponse,
     UpdateProduct,
     UpdateProductRequest,
-    UpdateProductResponse
+    UpdateProductResponse,
+    DeleteProduct,
+    DeleteProductRequest,
+    DeleteProductResponse
 )

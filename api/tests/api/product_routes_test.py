@@ -2,7 +2,7 @@ from decimal import Decimal
 from faker import Faker
 from unittest.mock import MagicMock
 
-from factories.use_cases.product import list_product_use_case, filter_product_use_case, update_product_use_case
+from factories.use_cases.product import delete_product_use_case, list_product_use_case, filter_product_use_case, update_product_use_case
 from app.src.core.models._product import Product, ProductStatuses
 
 fake = Faker()
@@ -124,7 +124,7 @@ def test_update_products_endpoint(app, client, mock_session_manager):
     mock_use_case = MagicMock(return_value=mock_response)
 
     app.dependency_overrides[update_product_use_case] = lambda: mock_use_case
-  
+
     request_body = {
         "product_id": str(product.product_id),
         "user_id": str(product.user_id),
@@ -132,7 +132,7 @@ def test_update_products_endpoint(app, client, mock_session_manager):
         "description": product.description,
         "price": str(product.price),
         "location": product.location,
-        "status": product.status,  
+        "status": product.status,
         "is_available": product.is_available
     }
 
@@ -151,6 +151,21 @@ def test_update_products_endpoint(app, client, mock_session_manager):
         "status": product.status,
         "is_available": product.is_available
     }
-    
+
     assert response.json() == expected_response
     mock_use_case.assert_called_once()
+
+
+def test_delete_product_endpoint_success(app, client, mock_session_manager):
+    mock_response = MagicMock()
+    product_id = fake.uuid4()
+    mock_response = product_id
+    mock_use_case = MagicMock(return_value=mock_response)
+
+    app.dependency_overrides[delete_product_use_case] = lambda: mock_use_case
+    response = client.delete(f"/products/{product_id}")
+
+    assert response.status_code == 200
+
+    expected_response = f"The product with id {product_id} was deleted."
+    assert response.json() == expected_response

@@ -15,6 +15,9 @@ from app.src.use_cases import (
     UpdateProduct,
     UpdateProductRequest,
     UpdateProductResponse,
+    DeleteProductResponse,
+    DeleteProductRequest,
+    DeleteProduct
 )
 from ..dtos import (
     ProductBase,
@@ -31,7 +34,8 @@ from factories.use_cases import (
     find_product_by_id_use_case,
     create_product_use_case,
     filter_product_use_case,
-    update_product_use_case
+    update_product_use_case,
+    delete_product_use_case,
 )
 from app.src.core.models import Product
 
@@ -123,3 +127,15 @@ async def update_product(
     response_dto: UpdateProductResponseDto = UpdateProductResponseDto(
         **response._asdict())
     return response_dto
+
+
+@product_router.delete("/{product_id}", response_model=str)
+async def delete_product(
+    product_id: str,
+    use_case: DeleteProduct = Depends(delete_product_use_case)
+) -> DeleteProductResponse:
+    try:
+        response = use_case(DeleteProductRequest(product_id=product_id))
+        return f"The product with id {response} was deleted."
+    except Exception as error:
+        return str(error)

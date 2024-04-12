@@ -3,3 +3,4 @@ from .get_by_id import FindProductById, FindProductByIdRequest, FindProductByIdR
 from .create import CreateProduct, CreateProductRequest, CreateProductResponse
 from .filter import FilterProduct, FilterProductResponse
 from .update import UpdateProduct, UpdateProductRequest, UpdateProductResponse
+from .delete import DeleteProduct, DeleteProductRequest, DeleteProductResponse

@@ -5,7 +5,8 @@ from app.src.use_cases import (
     FindProductById,
     CreateProduct,
     FilterProduct,
-    UpdateProduct
+    UpdateProduct,
+    DeleteProduct
 )
 
 
@@ -31,3 +32,7 @@ def filter_product_use_case() -> FilterProduct:
 
 def update_product_use_case() -> UpdateProduct:
     return UpdateProduct(get_product_repository())
+
+
+def delete_product_use_case() -> DeleteProduct:
+    return DeleteProduct(get_product_repository())
